@@ -31,6 +31,7 @@ async function run() {
     const newArrivalCollection = client.db('asetta-db').collection('new-arrivals');
 
     /* ------------------------------ Code here --------------------------------------------- */
+
     
     // new arrials get all data
     app.get('/new-arrivals', async(req, res)=>{
