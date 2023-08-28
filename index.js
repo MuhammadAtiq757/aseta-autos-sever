@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 require('dotenv').config()
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const port = process.env.PORT || 5000;
 
 
@@ -11,6 +11,7 @@ app.use(cors());
 app.use(express.json());
 
 /* --------------------------------------------- MongoDB Code Start ------------------------*/
+
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.b0ddt3v.mongodb.net/?retryWrites=true&w=majority`;
 
@@ -27,9 +28,23 @@ async function run() {
     try {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
+    const newArrivalCollection = client.db('asetta-db').collection('new-arrivals');
 
     /* ------------------------------ Code here --------------------------------------------- */
 
+    
+    // new arrials get all data
+    app.get('/new-arrivals', async(req, res)=>{
+        const result = await newArrivalCollection.find().toArray();
+        res.send(result)
+    })
+    // new arrials get single data find
+    app.get('/new-arrivals/:id', async(req, res)=>{
+        const id = req.params.id;
+        const query = {_id : new ObjectId(id)}
+        const result = await newArrivalCollection.findOne(query);
+        res.send(result)
+    })
     /* ------------------------------ Code here --------------------------------------------- */
 
 
