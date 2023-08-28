@@ -32,19 +32,6 @@ async function run() {
     const OurTeamCollection = client.db('asetta-db').collection('OurTeam');
 
     /* ------------------------------ Code here --------------------------------------------- */
-    // our team get all data
-    app.get('/ourteam', async(req, res)=>{
-        const result = await OurTeamCollection.find().toArray();
-        res.send(result)
-    })
-    
-    app.get('/ourteam/:id', async(req, res)=>{
-        const id = req.params.id;
-        const query = {_id : new ObjectId(id)}
-        const result = await OurTeamCollection.findOne(query);
-        res.send(result)
-    })
-
     
     // new arrials get all data
     app.get('/new-arrivals', async(req, res)=>{
