@@ -12,8 +12,7 @@ app.use(express.json());
 
 /* --------------------------------------------- MongoDB Code Start ------------------------*/
 
-
-const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.bjkyc58.mongodb.net/?retryWrites=true&w=majority`;
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.b0ddt3v.mongodb.net/?retryWrites=true&w=majority`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
@@ -30,7 +29,7 @@ async function run() {
     await client.connect();
 
     /* ------------------------------ Code here --------------------------------------------- */
-    
+
     /* ------------------------------ Code here --------------------------------------------- */
 
 
