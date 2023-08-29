@@ -32,6 +32,7 @@ async function run() {
     const bestDealersCollection = client.db('asetta-db').collection('best-dealers');
     const blogsCollection = client.db('asetta-db').collection('our-blogs');
     const OurTeamCollection = client.db('asetta-db').collection('OurTeam');
+    const servicesCollection = client.db('asetta-db').collection('services');
 
     /* ------------------------------ Code here --------------------------------------------- */
     // for about route data
@@ -44,6 +45,20 @@ async function run() {
         const id = req.params.id;
         const query = {_id : new ObjectId(id)}
         const result = await OurTeamCollection.findOne(query);
+        res.send(result)
+    })
+
+
+    // service related data here
+    app.get('/services', async(req, res)=>{
+        const result = await servicesCollection.find().toArray();
+        res.send(result)
+    })
+
+    app.get('/services/:id', async(req, res)=>{
+        const id = req.params.id;
+        const query = {_id : new ObjectId(id)}
+        const result = await servicesCollection.findOne(query);
         res.send(result)
     })
 
