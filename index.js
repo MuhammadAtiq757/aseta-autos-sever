@@ -30,6 +30,7 @@ async function run() {
     await client.connect();
     const newArrivalCollection = client.db('asetta-db').collection('new-arrivals');
     const bestDealersCollection = client.db('asetta-db').collection('best-dealers');
+    const blogsCollection = client.db('asetta-db').collection('our-blogs');
     const OurTeamCollection = client.db('asetta-db').collection('OurTeam');
 
     /* ------------------------------ Code here --------------------------------------------- */
@@ -72,6 +73,21 @@ async function run() {
         const id = req.params.id;
         const query = {_id : new ObjectId(id)}
         const result = await bestDealersCollection.findOne(query);
+        res.send(result)
+    })
+
+    // Our Blogs data get
+
+    app.get('/our-blogs', async(req, res)=>{
+        const result = await blogsCollection.find().toArray();
+        res.send(result)
+    })
+
+// best dealers get single data find
+    app.get('/our-blogs/:id', async(req, res)=>{
+        const id = req.params.id;
+        const query = {_id : new ObjectId(id)}
+        const result = await blogsCollection.findOne(query);
         res.send(result)
     })
 
