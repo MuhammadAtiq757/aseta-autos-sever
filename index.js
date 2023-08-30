@@ -33,8 +33,18 @@ async function run() {
     const blogsCollection = client.db('asetta-db').collection('our-blogs');
     const OurTeamCollection = client.db('asetta-db').collection('OurTeam');
     const servicesCollection = client.db('asetta-db').collection('services');
+    const usersCollection = client.db('asetta-db').collection('users');
 
     /* ------------------------------ Code here --------------------------------------------- */
+
+
+    // users collections data here
+
+   
+
+
+
+
     // for about route data
     app.get('/ourteam', async(req, res)=>{
         const result = await OurTeamCollection.find().toArray();
