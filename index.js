@@ -31,6 +31,7 @@ async function run() {
     const newArrivalCollection = client.db('asetta-db').collection('new-arrivals');
     const bestDealersCollection = client.db('asetta-db').collection('best-dealers');
     const blogsCollection = client.db('asetta-db').collection('our-blogs');
+    const usersCollection = client.db('asetta-db').collection('users');
     const OurTeamCollection = client.db('asetta-db').collection('OurTeam');
     const servicesCollection = client.db('asetta-db').collection('services');
     const usersCollection = client.db('asetta-db').collection('users');
@@ -116,6 +117,23 @@ async function run() {
         res.send(result)
     })
 
+     // users data get
+    app.get('/users', async(req, res)=>{
+        const result = await usersCollection.find().toArray();
+        res.send(result)
+    })
+
+    // create user
+    app.post("/users", async (req, res) => {
+        const user = req.body;
+        const query = { email: user.email };
+        const existing = await usersCollection.findOne(query);
+        if (existing) {
+          return res.send({ message: "already insert" });
+        }
+        const result = await usersCollection.insertOne(user);
+        res.send(result);
+      });
     /* ------------------------------ Code here --------------------------------------------- */
 
 
