@@ -124,6 +124,19 @@ async function run() {
         const result = await usersCollection.insertOne(user);
         res.send(result);
       });
+
+
+
+      // add dealer cars
+    app.post("/addACar", async (req, res) => {
+        const data = req.body;
+        if (!data) {
+          return res.send({ message: "data not found" });
+        }
+        const result = await newArrivalCollection.insertOne(data);
+        res.send(result);
+      });
+
     /* ------------------------------ Code here --------------------------------------------- */
 
 
