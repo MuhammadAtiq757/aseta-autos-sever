@@ -31,6 +31,7 @@ async function run() {
     const newArrivalCollection = client.db('asetta-db').collection('new-arrivals');
     const bestDealersCollection = client.db('asetta-db').collection('best-dealers');
     const blogsCollection = client.db('asetta-db').collection('our-blogs');
+    const usersCollection = client.db('asetta-db').collection('users');
     const OurTeamCollection = client.db('asetta-db').collection('OurTeam');
     const servicesCollection = client.db('asetta-db').collection('services');
 
@@ -132,6 +133,53 @@ async function run() {
 
 
    
+     // users data get
+    app.get('/users', async(req, res)=>{
+        const result = await usersCollection.find().toArray();
+        res.send(result)
+    })
+
+    // create user
+    app.post("/users", async (req, res) => {
+        const user = req.body;
+        const query = { email: user.email };
+        const existing = await usersCollection.findOne(query);
+        if (existing) {
+          return res.send({ message: "already insert" });
+        }
+        const result = await usersCollection.insertOne(user);
+        res.send(result);
+      });
+
+// update user role
+// make dealer
+    app.patch(`/makeDealer`, async(req, res)=>{
+        // const email = req?.body?.email
+        const filter = {email : req?.body?.email}
+        const options = { upsert: true };
+        const updateDoc = {
+          $set: {
+            dealer_request : 'pending',
+          },
+        };
+  
+        const result = await usersCollection.updateOne(filter, updateDoc, options)
+        res.send(result)
+      })
+
+
+
+      // add dealer cars
+    app.post("/addACar", async (req, res) => {
+        const data = req.body;
+        if (!data) {
+          return res.send({ message: "data not found" });
+        }
+        const result = await newArrivalCollection.insertOne(data);
+        res.send(result);
+      });
+
+    /* ------------------------------ Code here --------------------------------------------- */
 
 
     // Send a ping to confirm a successful connection
