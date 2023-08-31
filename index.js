@@ -125,6 +125,22 @@ async function run() {
         res.send(result);
       });
 
+// update user role
+// make dealer
+    app.patch(`/makeDealer`, async(req, res)=>{
+        // const email = req?.body?.email
+        const filter = {email : req?.body?.email}
+        const options = { upsert: true };
+        const updateDoc = {
+          $set: {
+            dealer_request : 'pending',
+          },
+        };
+  
+        const result = await usersCollection.updateOne(filter, updateDoc, options)
+        res.send(result)
+      })
+
 
 
       // add dealer cars
