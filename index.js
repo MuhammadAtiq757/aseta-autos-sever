@@ -105,8 +105,33 @@ async function run() {
         const result = await blogsCollection.findOne(query);
         res.send(result)
     })
+ /* ------------------------------ Code here --------------------------------------------- */
 
-    /* ------------------------------ Code here --------------------------------------------- */
+
+
+    /* search feild here (atiq) */
+    app.get("/findName/:text", async (req, res) => {
+        const text = req.params.text;
+        const result = await newArrivalCollection.find({
+            $or: [
+              { make: { $regex: text, $options: "i" } },
+             
+            ],
+          })
+          .toArray();
+        res.send(result);
+      });
+
+      /* CAR CATEGORY (atiq)*/
+
+      app.get('/new-arrivals/:make', async (req, res)=>{
+        const id = req.params.make;
+        const toys = await newArrivalCollection.find({make: id}).toArray()
+        res.send(toys)
+      })
+
+
+   
 
 
     // Send a ping to confirm a successful connection
