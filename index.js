@@ -134,6 +134,35 @@ async function run() {
         const result = await usersCollection.insertOne(user);
         res.send(result);
       });
+
+// update user role
+// make dealer
+    app.patch(`/makeDealer`, async(req, res)=>{
+        // const email = req?.body?.email
+        const filter = {email : req?.body?.email}
+        const options = { upsert: true };
+        const updateDoc = {
+          $set: {
+            dealer_request : 'pending',
+          },
+        };
+  
+        const result = await usersCollection.updateOne(filter, updateDoc, options)
+        res.send(result)
+      })
+
+
+
+      // add dealer cars
+    app.post("/addACar", async (req, res) => {
+        const data = req.body;
+        if (!data) {
+          return res.send({ message: "data not found" });
+        }
+        const result = await newArrivalCollection.insertOne(data);
+        res.send(result);
+      });
+
     /* ------------------------------ Code here --------------------------------------------- */
 
 
