@@ -34,7 +34,7 @@ async function run() {
     const usersCollection = client.db('asetta-db').collection('users');
     const OurTeamCollection = client.db('asetta-db').collection('OurTeam');
     const servicesCollection = client.db('asetta-db').collection('services');
-    const usersCollection = client.db('asetta-db').collection('users');
+
 
     /* ------------------------------ Code here --------------------------------------------- */
 
