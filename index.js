@@ -166,6 +166,22 @@ async function run() {
         const result = await usersCollection.updateOne(filter, updateDoc, options)
         res.send(result)
       })
+// make dealer confirm
+    app.patch(`/makeDealerConfirm/:id`, async(req, res)=>{
+        const id = req.params.id;
+        const filter = {_id : new ObjectId(id)}
+        // const filter = {email : req?.body?.email}
+        const options = { upsert: true };
+        const updateDoc = {
+          $set: {
+            dealer_request : 'success',
+            role : 'dealer'
+          },
+        };
+  
+        const result = await usersCollection.updateOne(filter, updateDoc, options)
+        res.send(result)
+      })
 
 
 
