@@ -98,6 +98,13 @@ async function run() {
         const result = await blogsCollection.find().toArray();
         res.send(result)
     })
+    // Blogs post
+
+    app.post("/blogPost", async (req, res) => {
+        const blog = req.body;
+        const result = await blogsCollection.insertOne(blog);
+        res.send(result);
+      });
 
 // best dealers get single data find
     app.get('/our-blogs/:id', async(req, res)=>{
