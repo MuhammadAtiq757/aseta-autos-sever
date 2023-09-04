@@ -31,6 +31,7 @@ async function run() {
     const newArrivalCollection = client.db('asetta-db').collection('new-arrivals');
     const bestDealersCollection = client.db('asetta-db').collection('best-dealers');
     const blogsCollection = client.db('asetta-db').collection('our-blogs');
+    const clientReviewCollection = client.db('asetta-db').collection('clientReview');
     const usersCollection = client.db('asetta-db').collection('users');
     const OurTeamCollection = client.db('asetta-db').collection('OurTeam');
     const servicesCollection = client.db('asetta-db').collection('services');
@@ -89,6 +90,12 @@ async function run() {
         const id = req.params.id;
         const query = {_id : new ObjectId(id)}
         const result = await bestDealersCollection.findOne(query);
+        res.send(result)
+    })
+    // client review data get
+
+    app.get('/client-review', async(req, res)=>{
+        const result = await clientReviewCollection.find().toArray();
         res.send(result)
     })
 
