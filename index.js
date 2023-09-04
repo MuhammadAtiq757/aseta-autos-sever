@@ -32,6 +32,7 @@ async function run() {
     const bestDealersCollection = client.db('asetta-db').collection('best-dealers');
     const blogsCollection = client.db('asetta-db').collection('our-blogs');
     const clientReviewCollection = client.db('asetta-db').collection('clientReview');
+    const cardsCollections = client.db('asetta-db').collection('cardsCollections');
     const usersCollection = client.db('asetta-db').collection('users');
     const OurTeamCollection = client.db('asetta-db').collection('OurTeam');
     const servicesCollection = client.db('asetta-db').collection('services');
@@ -104,6 +105,23 @@ async function run() {
     app.post("/client-review", async (req, res) => {
         const review = req.body;
         const result = await clientReviewCollection.insertOne(review);
+        res.send(result);
+      });
+
+
+         // cards data get
+
+    app.get('/cards', async(req, res)=>{
+        const result = await cardsCollections.find().toArray();
+        res.send(result)
+    })
+
+
+    // add to card
+
+    app.post("/addToCard", async (req, res) => {
+        const card = req.body;
+        const result = await cardsCollections.insertOne(card);
         res.send(result);
       });
 
