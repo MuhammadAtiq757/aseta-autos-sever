@@ -99,6 +99,14 @@ async function run() {
         res.send(result)
     })
 
+    // review post
+
+    app.post("/client-review", async (req, res) => {
+        const review = req.body;
+        const result = await clientReviewCollection.insertOne(review);
+        res.send(result);
+      });
+
     // Our Blogs data get
 
     app.get('/our-blogs', async(req, res)=>{
