@@ -31,6 +31,9 @@ async function run() {
     const newArrivalCollection = client.db('asetta-db').collection('new-arrivals');
     const bestDealersCollection = client.db('asetta-db').collection('best-dealers');
     const blogsCollection = client.db('asetta-db').collection('our-blogs');
+    const clientReviewCollection = client.db('asetta-db').collection('clientReview');
+    const cardsCollections = client.db('asetta-db').collection('cardsCollections');
+    const blogCommentsCollection = client.db('asetta-db').collection('blogCommentsCollection');
     const usersCollection = client.db('asetta-db').collection('users');
     const OurTeamCollection = client.db('asetta-db').collection('OurTeam');
     const servicesCollection = client.db('asetta-db').collection('services');
@@ -101,6 +104,45 @@ async function run() {
         const result = await bestDealersCollection.findOne(query);
         res.send(result)
     })
+    // client review data get
+
+    app.get('/client-review', async(req, res)=>{
+        const result = await clientReviewCollection.find().toArray();
+        res.send(result)
+    })
+
+    // review post
+
+    app.post("/client-review", async (req, res) => {
+        const review = req.body;
+        const result = await clientReviewCollection.insertOne(review);
+        res.send(result);
+      });
+
+
+         // cards data get
+
+    app.get('/cards', async(req, res)=>{
+        const result = await cardsCollections.find().toArray();
+        res.send(result)
+    })
+
+
+    // add to card
+
+    app.post("/addToCard", async (req, res) => {
+        const card = req.body;
+        const result = await cardsCollections.insertOne(card);
+        res.send(result);
+      });
+    // delete cards form my cards
+
+    app.delete("/deleteCard/:id", async (req, res) => {
+        const id = req.params.id;
+        const query = {_id : new ObjectId(id)}
+        const result = await cardsCollections.deleteOne(query);
+        res.send(result);
+      });
 
     // Our Blogs data get
 
@@ -116,6 +158,23 @@ async function run() {
         res.send(result);
       });
 
+
+          // Blogs comment data get
+
+    app.get('/blogComments/:id', async(req, res)=>{
+        const id = req.params.id;
+        const query = {postId : id}
+        const result = await blogCommentsCollection.find(query).toArray();
+        res.send(result)
+    })
+    // Blogs comments post
+
+    app.post("/blogComments", async (req, res) => {
+        const blog = req.body;
+        const result = await blogCommentsCollection.insertOne(blog);
+        res.send(result);
+      });
+
 // best dealers get single data find
     app.get('/our-blogs/:id', async(req, res)=>{
         const id = req.params.id;
@@ -123,7 +182,33 @@ async function run() {
         const result = await blogsCollection.findOne(query);
         res.send(result)
     })
+ /* ------------------------------ Code here --------------------------------------------- */
 
+
+
+    /* search feild here (atiq) */
+    app.get("/findName/:text", async (req, res) => {
+        const text = req.params.text;
+        const result = await newArrivalCollection.find({
+            $or: [
+              { make: { $regex: text, $options: "i" } },
+             
+            ],
+          })
+          .toArray();
+        res.send(result);
+      });
+
+      /* CAR CATEGORY (atiq)*/
+
+      app.get('/new-arrivals/:make', async (req, res)=>{
+        const id = req.params.make;
+        const toys = await newArrivalCollection.find({make: id}).toArray()
+        res.send(toys)
+      })
+
+
+   
      // users data get
     app.get('/users', async(req, res)=>{
         const result = await usersCollection.find().toArray();
