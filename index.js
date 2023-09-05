@@ -33,6 +33,7 @@ async function run() {
     const blogsCollection = client.db('asetta-db').collection('our-blogs');
     const clientReviewCollection = client.db('asetta-db').collection('clientReview');
     const cardsCollections = client.db('asetta-db').collection('cardsCollections');
+    const blogCommentsCollection = client.db('asetta-db').collection('blogCommentsCollection');
     const usersCollection = client.db('asetta-db').collection('users');
     const OurTeamCollection = client.db('asetta-db').collection('OurTeam');
     const servicesCollection = client.db('asetta-db').collection('services');
@@ -144,6 +145,23 @@ async function run() {
     app.post("/blogPost", async (req, res) => {
         const blog = req.body;
         const result = await blogsCollection.insertOne(blog);
+        res.send(result);
+      });
+
+
+          // Blogs comment data get
+
+    app.get('/blogComments/:id', async(req, res)=>{
+        const id = req.params.id;
+        const query = {postId : id}
+        const result = await blogCommentsCollection.find(query).toArray();
+        res.send(result)
+    })
+    // Blogs comments post
+
+    app.post("/blogComments", async (req, res) => {
+        const blog = req.body;
+        const result = await blogCommentsCollection.insertOne(blog);
         res.send(result);
       });
 
