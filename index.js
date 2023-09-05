@@ -124,6 +124,14 @@ async function run() {
         const result = await cardsCollections.insertOne(card);
         res.send(result);
       });
+    // delete cards form my cards
+
+    app.delete("/deleteCard/:id", async (req, res) => {
+        const id = req.params.id;
+        const query = {_id : new ObjectId(id)}
+        const result = await cardsCollections.deleteOne(query);
+        res.send(result);
+      });
 
     // Our Blogs data get
 
