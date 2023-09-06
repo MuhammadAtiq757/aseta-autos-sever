@@ -1,7 +1,6 @@
 {
   "name": "asetta-autos-server",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
@@ -16,5 +15,15 @@
     "env": "^0.0.2",
     "express": "^4.18.2",
     "mongodb": "^5.8.1"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/emamjion/asetta-autos-server.git"
+  },
+  "bugs": {
+    "url": "https://github.com/emamjion/asetta-autos-server/issues"
+  },
+  "homepage": "https://github.com/emamjion/asetta-autos-server#readme",
+  "description": ""
 }
