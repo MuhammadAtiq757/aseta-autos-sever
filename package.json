@@ -14,9 +14,9 @@
     "dotenv": "^16.3.1",
     "env": "^0.0.2",
     "express": "^4.18.2",
-    "mongodb": "^5.8.1"
+    "mongodb": "^5.8.1",
+    "stripe": "^13.4.0"
   },
-  "devDependencies": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/emamjion/asetta-autos-server.git"
