@@ -36,6 +36,7 @@ async function run() {
     const blogCommentsCollection = client.db('asetta-db').collection('blogCommentsCollection');
     const usersCollection = client.db('asetta-db').collection('users');
     const OurTeamCollection = client.db('asetta-db').collection('OurTeam');
+    const stufCollection = client.db('asetta-db').collection('stufCollection');
     const servicesCollection = client.db('asetta-db').collection('services');
 
 
@@ -104,6 +105,13 @@ async function run() {
         const result = await bestDealersCollection.findOne(query);
         res.send(result)
     })
+
+     // stuf  data load
+     app.get('/ourStuf', async(req, res)=>{
+      const result = await stufCollection.find().toArray();
+      res.send(result)
+  })
+
     // client review data get
 
     app.get('/client-review', async(req, res)=>{
