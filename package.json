@@ -16,7 +16,6 @@
     "express": "^4.18.2",
     "mongodb": "^5.8.1"
   },
-  "devDependencies": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/emamjion/asetta-autos-server.git"
