@@ -167,6 +167,37 @@ async function run() {
       });
 
 
+    //   // blog like
+    // app.patch(`/blogLike/:id`, async(req, res)=>{
+    //   const id = req.params.id;
+    //   const likeEmail = req.body.email
+    //   console.log(likeEmail);
+    //   const filter = {_id : new ObjectId(id)}
+
+    //   const findBlog = await blogsCollection.findOne(filter)
+
+    //   // const allEmail = findBlog?.postLove?.email
+
+
+
+    //   let postLove = findBlog?.postLove?.postLove + 1
+
+    //   console.log(postLove);
+
+
+    //   const options = { upsert: true };
+    //   const updateDoc = {
+    //     $set: {
+    //       postLove : postLove,
+    //     },
+    //   };
+
+    //   const result = await blogsCollection.updateOne(filter, updateDoc, options)
+
+    //   console.log(result);
+    //   // res.send(result)
+    // })
+
           // Blogs comment data get
 
     app.get('/blogComments/:id', async(req, res)=>{
