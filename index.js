@@ -37,6 +37,7 @@ async function run() {
     const blogCommentsCollection = client.db('asetta-db').collection('blogCommentsCollection');
     const usersCollection = client.db('asetta-db').collection('users');
     const OurTeamCollection = client.db('asetta-db').collection('OurTeam');
+    const stufCollection = client.db('asetta-db').collection('stufCollection');
     const servicesCollection = client.db('asetta-db').collection('services');
 
     /* ------------------------------ Code here --------------------------------------------- */
@@ -95,6 +96,13 @@ async function run() {
         const result = await bestDealersCollection.findOne(query);
         res.send(result)
     })
+
+     // stuf  data load
+     app.get('/ourStuf', async(req, res)=>{
+      const result = await stufCollection.find().toArray();
+      res.send(result)
+  })
+
     // client review data get
 
     app.get('/client-review', async(req, res)=>{
@@ -149,6 +157,37 @@ async function run() {
         res.send(result);
       });
 
+
+    //   // blog like
+    // app.patch(`/blogLike/:id`, async(req, res)=>{
+    //   const id = req.params.id;
+    //   const likeEmail = req.body.email
+    //   console.log(likeEmail);
+    //   const filter = {_id : new ObjectId(id)}
+
+    //   const findBlog = await blogsCollection.findOne(filter)
+
+    //   // const allEmail = findBlog?.postLove?.email
+
+
+
+    //   let postLove = findBlog?.postLove?.postLove + 1
+
+    //   console.log(postLove);
+
+
+    //   const options = { upsert: true };
+    //   const updateDoc = {
+    //     $set: {
+    //       postLove : postLove,
+    //     },
+    //   };
+
+    //   const result = await blogsCollection.updateOne(filter, updateDoc, options)
+
+    //   console.log(result);
+    //   // res.send(result)
+    // })
 
           // Blogs comment data get
 
@@ -243,6 +282,21 @@ async function run() {
           $set: {
             dealer_request : 'success',
             role : 'dealer'
+          },
+        };
+  
+        const result = await usersCollection.updateOne(filter, updateDoc, options)
+        res.send(result)
+      })
+//  dealer reject
+    app.patch(`/dealerReject/:id`, async(req, res)=>{
+        const id = req.params.id;
+        const filter = {_id : new ObjectId(id)}
+        // const filter = {email : req?.body?.email}
+        const options = { upsert: true };
+        const updateDoc = {
+          $set: {
+            dealer_request : 'rejected',
           },
         };
   
