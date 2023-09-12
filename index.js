@@ -198,6 +198,27 @@ async function run() {
       res.send(result)
     })
 
+
+      // blog dis like
+    app.patch(`/blogDisLike/:id`, async(req, res)=>{
+      const id = req.params.id;
+      const likeEmail = req.body.email
+      const filter = {_id : new ObjectId(id)}
+      const findBlog = await blogsCollection.findOne(filter)
+
+
+      let newEmails = findBlog?.loveEmails.filter(em =>em !== likeEmail);
+
+      const options = { upsert: true };
+      const updateDoc = {
+        $set: {
+          loveEmails : newEmails
+        },
+      };
+      const result = await blogsCollection.updateOne(filter, updateDoc, options)
+      res.send(result)
+    })
+
     // Blogs comment data get
 
     app.get('/blogComments/:id', async (req, res) => {
