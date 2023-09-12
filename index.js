@@ -317,20 +317,38 @@ async function run() {
       });
 
 //  create payment intent
-app.post('/create-payment-intent', async(req, res) =>{
-  const {price} = req.body;
-  const amount = price*100;
-  const paymentIntent = await stripe.paymentIntent.create({
-    amount: amount,
-    currency: 'usd',
-    payment_method_types: ['card']
+// app.post('/create-payment-intent', async(req, res) =>{
+//   const {totalPrice} = req.body;
+//   const amount = totalPrice*100;
+//   const paymentIntent = await stripe.paymentIntent.create({
+//     amount: amount,
+//     currency: 'usd',
+//     payment_method_types: ['card']
 
-  });
-  res.send({
-    clientSecret: paymentIntent.client_secret
-  })
-})
+//   });
+//   res.send({
+//     clientSecret: paymentIntent.client_secret
+//   })
+// })
 
+app.post('/create-payment-intent', async (req, res) => {
+  const { totalPrice } = req.body;
+  const amount = totalPrice * 100;
+  try {
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: amount,
+      currency: 'usd',
+      payment_method_types: ['card'],
+    });
+    res.send({
+      clientSecret: paymentIntent.client_secret,
+    });
+  } catch (error) {
+    // Handle errors, e.g., send an error response to the client
+    console.error('Error creating PaymentIntent:', error);
+    res.status(500).json({ error: 'An error occurred while creating the PaymentIntent.' });
+  }
+});
 
 
     /* ------------------------------ Code here --------------------------------------------- */
