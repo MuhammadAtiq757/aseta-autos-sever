@@ -39,6 +39,7 @@ async function run() {
     const OurTeamCollection = client.db('asetta-db').collection('OurTeam');
     const stufCollection = client.db('asetta-db').collection('stufCollection');
     const servicesCollection = client.db('asetta-db').collection('services');
+    const usedCollection = client.db('asetta-db').collection('addUsedCar');
 
     /* ------------------------------ Code here --------------------------------------------- */
     // for about route data
@@ -349,6 +350,22 @@ app.post('/create-payment-intent', async (req, res) => {
     res.status(500).json({ error: 'An error occurred while creating the PaymentIntent.' });
   }
 });
+
+app.post('/add-car-user', async(req, res) => {
+  const adding = req.body;
+  const result = await usedCollection.insertOne(adding)
+  res.send(result)
+  // console.log(adding);
+})
+
+
+app.get('/myInfo/:email', async(req, res)=>{
+  const email = req.params.email;
+  const filter = {userEmail : email}
+  const result = await usedCollection.find(filter).toArray();
+  res.send(result);
+  })
+
 
 
     /* ------------------------------ Code here --------------------------------------------- */
