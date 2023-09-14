@@ -15,7 +15,12 @@
     "env": "^0.0.2",
     "express": "^4.18.2",
     "mongodb": "^5.8.1",
+<<<<<<< HEAD
+    "sslcommerz-lts": "^1.1.0",
+    "stripe": "^13.4.0"
+=======
     "stripe": "^13.5.0"
+>>>>>>> 49243c1fbf9b769244696438c001c80c11eafea5
   },
   "repository": {
     "type": "git",

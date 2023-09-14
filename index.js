@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
-const stripe = require('stripe')(process.env.PAYMENT_SECRET_KEY)
+const SSLCommerzPayment = require('sslcommerz-lts')
 require('dotenv').config()
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const port = process.env.PORT || 5000;
@@ -24,6 +24,11 @@ const client = new MongoClient(uri, {
     deprecationErrors: true,
   }
 });
+
+const store_id = process.env.STORE_ID
+const store_passwd = process.env.STORE_PASS
+const is_live = false //true for live, false for sandbox
+
 
 async function run() {
   try {
@@ -364,39 +369,9 @@ async function run() {
 
 
 
-//  create payment intent
-// app.post('/create-payment-intent', async(req, res) =>{
-//   const {totalPrice} = req.body;
-//   const amount = totalPrice*100;
-//   const paymentIntent = await stripe.paymentIntent.create({
-//     amount: amount,
-//     currency: 'usd',
-//     payment_method_types: ['card']
 
-//   });
-//   res.send({
-//     clientSecret: paymentIntent.client_secret
-//   })
-// })
 
-app.post('/create-payment-intent', async (req, res) => {
-  const { totalPrice } = req.body;
-  const amount = totalPrice * 100;
-  try {
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount: amount,
-      currency: 'usd',
-      payment_method_types: ['card'],
-    });
-    res.send({
-      clientSecret: paymentIntent.client_secret,
-    });
-  } catch (error) {
-    // Handle errors, e.g., send an error response to the client
-    console.error('Error creating PaymentIntent:', error);
-    res.status(500).json({ error: 'An error occurred while creating the PaymentIntent.' });
-  }
-});
+
 
 app.post('/add-car-user', async(req, res) => {
   const adding = req.body;
