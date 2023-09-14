@@ -402,14 +402,14 @@ app.post('/add-car-user', async(req, res) => {
   const adding = req.body;
   const result = await usedCollection.insertOne(adding)
   res.send(result)
-  // console.log(adding);
 })
 
 
-app.get('/myInfo/:email', async(req, res)=>{
-  const email = req.params.email;
-  const filter = {userEmail : email}
-  const result = await usedCollection.find(filter).toArray();
+app.get('/myInfo', async(req, res)=>{
+  // const email = req.params.email;
+  // const filter = {userEmail : email}
+  // const result = await usedCollection.find(filter).toArray();
+  const result = await usedCollection.find().toArray();
   res.send(result);
   })
 
