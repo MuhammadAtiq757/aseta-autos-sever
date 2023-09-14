@@ -46,6 +46,8 @@ async function run() {
     const servicesCollection = client.db('asetta-db').collection('services');
     const usedCollection = client.db('asetta-db').collection('addUsedCar');
     const WhatWeOfferCollection = client.db('asetta-db').collection('WhatWeOffer');
+    const OrderCollection = client.db('asetta-db').collection('order');
+
 
 
     /* ------------------------------ Code here --------------------------------------------- */
@@ -352,25 +354,7 @@ async function run() {
       res.send(result);
     });
 
-    //  create payment intent
-    app.post('/create-payment-intent', async (req, res) => {
-      const { price } = req.body;
-      const amount = price * 100;
-      const paymentIntent = await stripe.paymentIntent.create({
-        amount: amount,
-        currency: 'usd',
-        payment_method_types: ['card']
-
-      });
-      res.send({
-        clientSecret: paymentIntent.client_secret
-      })
-    })
-
-
-
-
-
+  
 
 
 app.post('/add-car-user', async(req, res) => {
@@ -388,7 +372,53 @@ app.get('/myInfo', async(req, res)=>{
   res.send(result);
   })
 
+const tran_id = new ObjectId().toString()
+  app.post("/getmoney", async(req, res) =>{
+   const product = await cardsCollections.findOne({
+    _id: new ObjectId(req.body.orderId)
+   });
+   const order = req.body;
+    const data = {
+      total_amount: product?.price,
+      currency: order.currency,
+      tran_id: tran_id, // use unique tran_id for each api call
+      success_url: 'http://localhost:3030/success',
+      fail_url: 'http://localhost:3030/fail',
+      cancel_url: 'http://localhost:3030/cancel',
+      ipn_url: 'http://localhost:3030/ipn',
+      shipping_method: 'Courier',
+      product_name: 'Computer.',
+      product_category: 'Electronic',
+      product_profile: 'general',
+      cus_name: order.name,
+      cus_email: 'customer@example.com',
+      cus_add1: order.address,
+      cus_add2: 'Dhaka',
+      cus_city: 'Dhaka',
+      cus_state: 'Dhaka',
+      cus_postcode: '1000',
+      cus_country: 'Bangladesh',
+      cus_phone: '01711111111',
+      cus_fax: '01711111111',
+      ship_name: 'Customer Name',
+      ship_add1: 'Dhaka',
+      ship_add2: 'Dhaka',
+      ship_city: 'Dhaka',
+      ship_state: 'Dhaka',
+      ship_postcode: 1000,
+      ship_country: 'Bangladesh',
+  };
 
+  console.log(data);
+
+  const sslcz = new SSLCommerzPayment(store_id, store_passwd, is_live)
+  sslcz.init(data).then(apiResponse => {
+      // Redirect the user to payment gateway
+      let GatewayPageURL = apiResponse.GatewayPageURL
+      res.send({url: GatewayPageURL});
+      console.log('Redirecting to: ', GatewayPageURL)
+  });
+  })
 
     /* ------------------------------ Code here --------------------------------------------- */
 
