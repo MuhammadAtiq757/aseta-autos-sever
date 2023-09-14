@@ -18,11 +18,11 @@ const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
-    serverApi: {
+  serverApi: {
     version: ServerApiVersion.v1,
     strict: true,
     deprecationErrors: true,
-}
+  }
 });
 
 const store_id = process.env.STORE_ID
@@ -31,7 +31,7 @@ const is_live = false //true for live, false for sandbox
 
 
 async function run() {
-    try {
+  try {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
     const newArrivalCollection = client.db('asetta-db').collection('new-arrivals');
@@ -45,282 +45,329 @@ async function run() {
     const stufCollection = client.db('asetta-db').collection('stufCollection');
     const servicesCollection = client.db('asetta-db').collection('services');
     const usedCollection = client.db('asetta-db').collection('addUsedCar');
+    const WhatWeOfferCollection = client.db('asetta-db').collection('WhatWeOffer');
+
 
     /* ------------------------------ Code here --------------------------------------------- */
-    // for about route data
-    app.get('/ourteam', async(req, res)=>{
-        const result = await OurTeamCollection.find().toArray();
-        res.send(result)
+
+
+    // users collections data here
+
+    //  WhatWeOffer collection data here
+    app.get('/WhatWeOffer', async (req, res) => {
+      const result = await WhatWeOfferCollection.find().toArray();
+      res.send(result)
     })
 
-    app.get('/ourteam/:id', async(req, res)=>{
-        const id = req.params.id;
-        const query = {_id : new ObjectId(id)}
-        const result = await OurTeamCollection.findOne(query);
-        res.send(result)
+
+    app.get('/WhatWeOffer/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) }
+      const result = await WhatWeOfferCollection.findOne(query);
+      res.send(result)
+    })
+
+
+
+
+    // for about route data
+    app.get('/ourteam', async (req, res) => {
+      const result = await OurTeamCollection.find().toArray();
+      res.send(result)
+    })
+
+    app.get('/ourteam/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) }
+      const result = await OurTeamCollection.findOne(query);
+      res.send(result)
     })
 
 
     // service related data here
-    app.get('/services', async(req, res)=>{
-        const result = await servicesCollection.find().toArray();
-        res.send(result)
+    app.get('/services', async (req, res) => {
+      const result = await servicesCollection.find().toArray();
+      res.send(result)
     })
 
-    app.get('/services/:id', async(req, res)=>{
-        const id = req.params.id;
-        const query = {_id : new ObjectId(id)}
-        const result = await servicesCollection.findOne(query);
-        res.send(result)
+    app.get('/services/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) }
+      const result = await servicesCollection.findOne(query);
+      res.send(result)
     })
 
-    
+
     // new arrials get all data
-    app.get('/new-arrivals', async(req, res)=>{
-        const result = await newArrivalCollection.find().toArray();
-        res.send(result)
+    app.get('/new-arrivals', async (req, res) => {
+      const result = await newArrivalCollection.find().toArray();
+      res.send(result)
     })
     // new arrials get single data find
-    app.get('/new-arrivals/:id', async(req, res)=>{
-        const id = req.params.id;
-        const query = {_id : new ObjectId(id)}
-        const result = await newArrivalCollection.findOne(query);
-        res.send(result)
+    app.get('/new-arrivals/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) }
+      const result = await newArrivalCollection.findOne(query);
+      res.send(result)
     })
 
     // best dealers data get
 
-    app.get('/best-dealers', async(req, res)=>{
-        const result = await bestDealersCollection.find().toArray();
-        res.send(result)
+    app.get('/best-dealers', async (req, res) => {
+      const result = await bestDealersCollection.find().toArray();
+      res.send(result)
     })
 
-// best dealers get single data find
-    app.get('/best-dealers/:id', async(req, res)=>{
-        const id = req.params.id;
-        const query = {_id : new ObjectId(id)}
-        const result = await bestDealersCollection.findOne(query);
-        res.send(result)
+    // best dealers get single data find
+    app.get('/best-dealers/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) }
+      const result = await bestDealersCollection.findOne(query);
+      res.send(result)
     })
 
-     // stuf  data load
-     app.get('/ourStuf', async(req, res)=>{
+    // stuf  data load
+    app.get('/ourStuf', async (req, res) => {
       const result = await stufCollection.find().toArray();
       res.send(result)
-  })
+    })
 
     // client review data get
 
-    app.get('/client-review', async(req, res)=>{
-        const result = await clientReviewCollection.find().toArray();
-        res.send(result)
+    app.get('/client-review', async (req, res) => {
+      const result = await clientReviewCollection.find().toArray();
+      res.send(result)
     })
 
     // review post
 
     app.post("/client-review", async (req, res) => {
-        const review = req.body;
-        const result = await clientReviewCollection.insertOne(review);
-        res.send(result);
-      });
+      const review = req.body;
+      const result = await clientReviewCollection.insertOne(review);
+      res.send(result);
+    });
 
 
-         // cards data get
+    // cards data get
 
-    app.get('/cards', async(req, res)=>{
-        const result = await cardsCollections.find().toArray();
-        res.send(result)
+    app.get('/cards', async (req, res) => {
+      const result = await cardsCollections.find().toArray();
+      res.send(result)
     })
 
 
     // add to card
 
     app.post("/addToCard", async (req, res) => {
-        const card = req.body;
-        const result = await cardsCollections.insertOne(card);
-        res.send(result);
-      });
+      const card = req.body;
+      const result = await cardsCollections.insertOne(card);
+      res.send(result);
+    });
     // delete cards form my cards
 
     app.delete("/deleteCard/:id", async (req, res) => {
-        const id = req.params.id;
-        const query = {_id : new ObjectId(id)}
-        const result = await cardsCollections.deleteOne(query);
-        res.send(result);
-      });
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) }
+      const result = await cardsCollections.deleteOne(query);
+      res.send(result);
+    });
 
     // Our Blogs data get
 
-    app.get('/our-blogs', async(req, res)=>{
-        const result = await blogsCollection.find().toArray();
-        res.send(result)
+    app.get('/our-blogs', async (req, res) => {
+      const result = await blogsCollection.find().toArray();
+      res.send(result)
     })
     // Blogs post
 
     app.post("/blogPost", async (req, res) => {
-        const blog = req.body;
-        const result = await blogsCollection.insertOne(blog);
-        res.send(result);
-      });
+      const blog = req.body;
+      const result = await blogsCollection.insertOne(blog);
+      res.send(result);
+    });
 
 
-    //   // blog like
-    // app.patch(`/blogLike/:id`, async(req, res)=>{
-    //   const id = req.params.id;
-    //   const likeEmail = req.body.email
-    //   console.log(likeEmail);
-    //   const filter = {_id : new ObjectId(id)}
+      // blog like
+    app.patch(`/blogLike/:id`, async(req, res)=>{
+      const id = req.params.id;
+      const likeEmail = req.body.email
+      const filter = {_id : new ObjectId(id)}
+      const findBlog = await blogsCollection.findOne(filter)
+      findBlog.loveEmails.push(likeEmail)
+      const options = { upsert: true };
+      const updateDoc = {
+        $set: {
+          loveEmails : findBlog.loveEmails
+        },
+      };
+      const result = await blogsCollection.updateOne(filter, updateDoc, options)
+      res.send(result)
+    })
 
-    //   const findBlog = await blogsCollection.findOne(filter)
 
-    //   // const allEmail = findBlog?.postLove?.email
-
-
-
-    //   let postLove = findBlog?.postLove?.postLove + 1
-
-    //   console.log(postLove);
+      // blog dis like
+    app.patch(`/blogDisLike/:id`, async(req, res)=>{
+      const id = req.params.id;
+      const likeEmail = req.body.email
+      const filter = {_id : new ObjectId(id)}
+      const findBlog = await blogsCollection.findOne(filter)
 
 
-    //   const options = { upsert: true };
-    //   const updateDoc = {
-    //     $set: {
-    //       postLove : postLove,
-    //     },
-    //   };
+      let newEmails = findBlog?.loveEmails.filter(em =>em !== likeEmail);
 
-    //   const result = await blogsCollection.updateOne(filter, updateDoc, options)
+      const options = { upsert: true };
+      const updateDoc = {
+        $set: {
+          loveEmails : newEmails
+        },
+      };
+      const result = await blogsCollection.updateOne(filter, updateDoc, options)
+      res.send(result)
+    })
 
-    //   console.log(result);
-    //   // res.send(result)
-    // })
+    // Blogs comment data get
 
-          // Blogs comment data get
-
-    app.get('/blogComments/:id', async(req, res)=>{
-        const id = req.params.id;
-        const query = {postId : id}
-        const result = await blogCommentsCollection.find(query).toArray();
-        res.send(result)
+    app.get('/blogComments/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = { postId: id }
+      const result = await blogCommentsCollection.find(query).toArray();
+      res.send(result)
     })
     // Blogs comments post
 
     app.post("/blogComments", async (req, res) => {
-        const blog = req.body;
-        const result = await blogCommentsCollection.insertOne(blog);
-        res.send(result);
-      });
+      const blog = req.body;
+      const result = await blogCommentsCollection.insertOne(blog);
+      res.send(result);
+    });
 
-// best dealers get single data find
-    app.get('/our-blogs/:id', async(req, res)=>{
-        const id = req.params.id;
-        const query = {_id : new ObjectId(id)}
-        const result = await blogsCollection.findOne(query);
-        res.send(result)
+    // best dealers get single data find
+    app.get('/our-blogs/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) }
+      const result = await blogsCollection.findOne(query);
+      res.send(result)
     })
- /* ------------------------------ Code here --------------------------------------------- */
+    /* ------------------------------ Code here --------------------------------------------- */
 
 
 
     /* search feild here (atiq) */
     app.get("/findName/:text", async (req, res) => {
-        const text = req.params.text;
-        const result = await newArrivalCollection.find({
-            $or: [
-              { make: { $regex: text, $options: "i" } },
-             
-            ],
-          })
-          .toArray();
-        res.send(result);
-      });
+      const text = req.params.text;
+      const result = await newArrivalCollection.find({
+        $or: [
+          { make: { $regex: text, $options: "i" } },
 
-      /* CAR CATEGORY (atiq)*/
-
-      app.get('/new-arrivals/:make', async (req, res)=>{
-        const id = req.params.make;
-        const toys = await newArrivalCollection.find({make: id}).toArray()
-        res.send(toys)
+        ],
       })
+        .toArray();
+      res.send(result);
+    });
+
+    /* CAR CATEGORY (atiq)*/
+
+    app.get('/new-arrivals/:make', async (req, res) => {
+      const id = req.params.make;
+      const toys = await newArrivalCollection.find({ make: id }).toArray()
+      res.send(toys)
+    })
 
 
-   
-     // users data get
-    app.get('/users', async(req, res)=>{
-        const result = await usersCollection.find().toArray();
-        res.send(result)
+
+    // users data get
+    app.get('/users', async (req, res) => {
+      const result = await usersCollection.find().toArray();
+      res.send(result)
     })
 
     // create user
     app.post("/users", async (req, res) => {
-        const user = req.body;
-        const query = { email: user.email };
-        const existing = await usersCollection.findOne(query);
-        if (existing) {
-          return res.send({ message: "already insert" });
-        }
-        const result = await usersCollection.insertOne(user);
-        res.send(result);
-      });
+      const user = req.body;
+      const query = { email: user.email };
+      const existing = await usersCollection.findOne(query);
+      if (existing) {
+        return res.send({ message: "already insert" });
+      }
+      const result = await usersCollection.insertOne(user);
+      res.send(result);
+    });
 
-// update user role
-// make dealer
-    app.patch(`/makeDealer`, async(req, res)=>{
-        // const email = req?.body?.email
-        const filter = {email : req?.body?.email}
-        const options = { upsert: true };
-        const updateDoc = {
-          $set: {
-            dealer_request : 'pending',
-          },
-        };
-  
-        const result = await usersCollection.updateOne(filter, updateDoc, options)
-        res.send(result)
-      })
-// make dealer confirm
-    app.patch(`/makeDealerConfirm/:id`, async(req, res)=>{
-        const id = req.params.id;
-        const filter = {_id : new ObjectId(id)}
-        // const filter = {email : req?.body?.email}
-        const options = { upsert: true };
-        const updateDoc = {
-          $set: {
-            dealer_request : 'success',
-            role : 'dealer'
-          },
-        };
-  
-        const result = await usersCollection.updateOne(filter, updateDoc, options)
-        res.send(result)
-      })
-//  dealer reject
-    app.patch(`/dealerReject/:id`, async(req, res)=>{
-        const id = req.params.id;
-        const filter = {_id : new ObjectId(id)}
-        // const filter = {email : req?.body?.email}
-        const options = { upsert: true };
-        const updateDoc = {
-          $set: {
-            dealer_request : 'rejected',
-          },
-        };
-  
-        const result = await usersCollection.updateOne(filter, updateDoc, options)
-        res.send(result)
-      })
+    // update user role
+    // make dealer
+    app.patch(`/makeDealer`, async (req, res) => {
+      // const email = req?.body?.email
+      const filter = { email: req?.body?.email }
+      const options = { upsert: true };
+      const updateDoc = {
+        $set: {
+          dealer_request: 'pending',
+        },
+      };
+
+      const result = await usersCollection.updateOne(filter, updateDoc, options)
+      res.send(result)
+    })
+    // make dealer confirm
+    app.patch(`/makeDealerConfirm/:id`, async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) }
+      // const filter = {email : req?.body?.email}
+      const options = { upsert: true };
+      const updateDoc = {
+        $set: {
+          dealer_request: 'success',
+          role: 'dealer'
+        },
+      };
+
+      const result = await usersCollection.updateOne(filter, updateDoc, options)
+      res.send(result)
+    })
+    //  dealer reject
+    app.patch(`/dealerReject/:id`, async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) }
+      // const filter = {email : req?.body?.email}
+      const options = { upsert: true };
+      const updateDoc = {
+        $set: {
+          dealer_request: 'rejected',
+        },
+      };
+
+      const result = await usersCollection.updateOne(filter, updateDoc, options)
+      res.send(result)
+    })
 
 
 
-      // add dealer cars
+    // add dealer cars
     app.post("/addACar", async (req, res) => {
-        const data = req.body;
-        if (!data) {
-          return res.send({ message: "data not found" });
-        }
-        const result = await newArrivalCollection.insertOne(data);
-        res.send(result);
+      const data = req.body;
+      if (!data) {
+        return res.send({ message: "data not found" });
+      }
+      const result = await newArrivalCollection.insertOne(data);
+      res.send(result);
+    });
+
+    //  create payment intent
+    app.post('/create-payment-intent', async (req, res) => {
+      const { price } = req.body;
+      const amount = price * 100;
+      const paymentIntent = await stripe.paymentIntent.create({
+        amount: amount,
+        currency: 'usd',
+        payment_method_types: ['card']
+
       });
+      res.send({
+        clientSecret: paymentIntent.client_secret
+      })
+    })
+
+
 
 
 
@@ -330,14 +377,14 @@ app.post('/add-car-user', async(req, res) => {
   const adding = req.body;
   const result = await usedCollection.insertOne(adding)
   res.send(result)
-  // console.log(adding);
 })
 
 
-app.get('/myInfo/:email', async(req, res)=>{
-  const email = req.params.email;
-  const filter = {userEmail : email}
-  const result = await usedCollection.find(filter).toArray();
+app.get('/myInfo', async(req, res)=>{
+  // const email = req.params.email;
+  // const filter = {userEmail : email}
+  // const result = await usedCollection.find(filter).toArray();
+  const result = await usedCollection.find().toArray();
   res.send(result);
   })
 
@@ -349,10 +396,10 @@ app.get('/myInfo/:email', async(req, res)=>{
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
-    } finally {
+  } finally {
     // Ensures that the client will close when you finish/error
     // await client.close();
-}
+  }
 }
 run().catch(console.dir);
 
@@ -361,8 +408,8 @@ run().catch(console.dir);
 
 
 app.get('/', (req, res) => {
-    res.send('Asetta autos server is running');
+  res.send('Asetta autos server is running');
 })
 app.listen(port, () => {
-    console.log(`Asetta autos server is running on port : ${port}`);
+  console.log(`Asetta autos server is running on port : ${port}`);
 })
