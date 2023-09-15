@@ -382,7 +382,7 @@ const tran_id = new ObjectId().toString()
       total_amount: product?.price,
       currency: order.currency,
       tran_id: tran_id, // use unique tran_id for each api call
-      success_url: `http://localhost:5000/payment/success/${tran_id}`,
+      success_url: `https://asetta-autos-production.up.railway.app/payment/success/${tran_id}`,
       fail_url: 'http://localhost:3030/fail',
       cancel_url: 'http://localhost:3030/cancel',
       ipn_url: 'http://localhost:3030/ipn',
