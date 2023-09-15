@@ -427,7 +427,7 @@ const tran_id = new ObjectId().toString()
       ship_country: 'USA',
   };
 
-      console.log(data);
+      // console.log(data);
 
   const sslcz = new SSLCommerzPayment(store_id, store_passwd, is_live)
   sslcz.init(data).then(apiResponse => {
