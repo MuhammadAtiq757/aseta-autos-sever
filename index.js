@@ -456,7 +456,7 @@ const result= await OrderCollection.updateOne({
 });
 
 if(result.modifiedCount > 0){
-  res.redirect(`http://localhost:5173/payment/success/${req.params.tranId}`)
+  res.redirect(`https://asetta-autos-645ad.web.app/payment/success/${req.params.tranId}`)
 };
 
 })
