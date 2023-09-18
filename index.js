@@ -77,7 +77,7 @@ async function run() {
       const user = req.body;
       // const expiresInMonths = 2;
       // const expiresInDays = expiresInMonths * 30; 
-      const expire = 1
+      const expire = 30
       const token = jwt.sign(user, process.env.CAR_TOKEN_SECRET, {
         expiresIn: `${expire}d`
       // const token = jwt.sign(user, process.env.CAR_TOKEN_SECRET, {
