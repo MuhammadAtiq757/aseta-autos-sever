@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
+const jwt = require("jsonwebtoken");
 const SSLCommerzPayment = require('sslcommerz-lts')
 require('dotenv').config()
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
@@ -10,6 +11,22 @@ const port = process.env.PORT || 5000;
 // middleware
 app.use(cors());
 app.use(express.json());
+
+
+const verifyJWT = (req, res, next) => {
+  const authorization = req.headers.authorization;
+  if (!authorization) {
+    return res.status(401).send({ message: "unauthorize access" });
+  }
+  const token = authorization.split(" ")[1];
+  jwt.verify(token, process.env.CAR_TOKEN_SECRET, (err, decoded) => {
+    if (err) {
+      return res.status(401).send({ message: "unauthorize access" });
+    }
+    req.decoded = decoded;
+  });
+  next();
+};
 
 /* --------------------------------------------- MongoDB Code Start ------------------------*/
 
@@ -52,6 +69,22 @@ async function run() {
 
 
     /* ------------------------------ Code here --------------------------------------------- */
+
+
+    // jwt
+
+    app.post("/jwt", (req, res) => {
+      const user = req.body;
+      // const expiresInMonths = 2;
+      // const expiresInDays = expiresInMonths * 30; 
+      const expire = 1
+      const token = jwt.sign(user, process.env.CAR_TOKEN_SECRET, {
+        expiresIn: `${expire}d`
+      // const token = jwt.sign(user, process.env.CAR_TOKEN_SECRET, {
+      //   expiresIn: `5s`
+      });
+      res.send({ token });
+    });
 
 
     // users collections data here
@@ -170,8 +203,14 @@ async function run() {
 
     // cards data get
 
-    app.get('/cards', async (req, res) => {
-      const result = await cardsCollections.find().toArray();
+    app.get('/cards/:email', verifyJWT, async (req, res) => {
+      const email = req.params.email
+      const filter = {email : email}
+      const decodedEmail = req.decoded.email 
+      if(decodedEmail !== email){
+        return res.status(403).send({error : true, message : 'forbidden access'})
+      }
+      const result = await cardsCollections.find(filter).toArray();
       res.send(result)
     })
 
@@ -296,7 +335,7 @@ async function run() {
 
 
     // users data get
-    app.get('/users', async (req, res) => {
+    app.get('/users', verifyJWT, async (req, res) => {
       const result = await usersCollection.find().toArray();
       res.send(result)
     })
