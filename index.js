@@ -75,13 +75,8 @@ async function run() {
 
     app.post("/jwt", (req, res) => {
       const user = req.body;
-      // const expiresInMonths = 2;
-      // const expiresInDays = expiresInMonths * 30; 
-      const expire = 20
       const token = jwt.sign(user, process.env.CAR_TOKEN_SECRET, {
-        expiresIn: `${expire}d`
-      // const token = jwt.sign(user, process.env.CAR_TOKEN_SECRET, {
-      //   expiresIn: `5s`
+        expiresIn: '30d'
       });
       res.send({ token });
     });
@@ -203,15 +198,21 @@ async function run() {
 
     // cards data get
 
-    app.get('/cards', async (req, res) => {
+    app.get('/cards', verifyJWT, async (req, res) => {
       const email = req.query.email
       if(!email) {
         return res.send([])
       }
+
+      const decodedEmail = req.decoded?.email
+       if(decodedEmail !== email){
+        return res.status(403).send({message : 'not found'})
+       }
+
       const filter = {email : email}
       const result = await cardsCollections.find(filter).toArray();
-      if(!result){
-       return res.status(403).send({message : 'not found'})
+      if (result.length === 0) {
+        return res.status(404).send({ message: 'not found' });
       }
       res.send(result)
     })
