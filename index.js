@@ -204,9 +204,14 @@ async function run() {
     // cards data get
 
     app.get('/cards', async (req, res) => {
-      const result = await cardsCollections.find().toArray();
+      const email = req.query.email
+      if(!email) {
+        return res.send([])
+      }
+      const filter = {email : email}
+      const result = await cardsCollections.find(filter).toArray();
       if(!result){
-        res.status(403).send({message : 'not found'})
+       return res.status(403).send({message : 'not found'})
       }
       res.send(result)
     })
