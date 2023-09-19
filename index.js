@@ -77,7 +77,7 @@ async function run() {
       const user = req.body;
       // const expiresInMonths = 2;
       // const expiresInDays = expiresInMonths * 30; 
-      const expire = 30
+      const expire = 20
       const token = jwt.sign(user, process.env.CAR_TOKEN_SECRET, {
         expiresIn: `${expire}d`
       // const token = jwt.sign(user, process.env.CAR_TOKEN_SECRET, {
@@ -203,14 +203,11 @@ async function run() {
 
     // cards data get
 
-    app.get('/cards/:email', verifyJWT, async (req, res) => {
-      const email = req.params.email
-      const filter = {email : email}
-      const decodedEmail = req.decoded.email 
-      if(decodedEmail !== email){
-        return res.status(403).send({error : true, message : 'forbidden access'})
+    app.get('/cards', async (req, res) => {
+      const result = await cardsCollections.find().toArray();
+      if(!result){
+        res.status(403).send({message : 'not found'})
       }
-      const result = await cardsCollections.find(filter).toArray();
       res.send(result)
     })
 
