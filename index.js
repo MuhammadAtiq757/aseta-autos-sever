@@ -12,7 +12,7 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-
+// jwt verify
 const verifyJWT = (req, res, next) => {
   const authorization = req.headers.authorization;
   if (!authorization) {
@@ -71,8 +71,8 @@ async function run() {
     /* ------------------------------ Code here --------------------------------------------- */
 
 
-    // jwt
-
+    // jwt sign in
+ 
     app.post("/jwt", (req, res) => {
       const user = req.body;
       const token = jwt.sign(user, process.env.CAR_TOKEN_SECRET, {
@@ -146,12 +146,12 @@ async function run() {
     })
 
 
-    // new arrials get all data
+    // new arrivals all data get
     app.get('/new-arrivals', async (req, res) => {
       const result = await newArrivalCollection.find().toArray();
       res.send(result)
     })
-    // new arrials get single data find
+    // new arrivals get single data find
     app.get('/new-arrivals/:id', async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) }
@@ -159,14 +159,14 @@ async function run() {
       res.send(result)
     })
 
+    
     // best dealers data get
-
     app.get('/best-dealers', async (req, res) => {
       const result = await bestDealersCollection.find().toArray();
       res.send(result)
     })
 
-    // best dealers get single data find
+    // best dealers single data find
     app.get('/best-dealers/:id', async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) }
@@ -180,35 +180,30 @@ async function run() {
       res.send(result)
     })
 
-    // client review data get
 
+    // client review data get
     app.get('/client-review', async (req, res) => {
       const result = await clientReviewCollection.find().toArray();
       res.send(result)
     })
 
-    // review post
-
+    // client review post
     app.post("/client-review", async (req, res) => {
       const review = req.body;
       const result = await clientReviewCollection.insertOne(review);
       res.send(result);
     });
 
-
-    // cards data get
-
+    // cards data get and verify jwt
     app.get('/cards', verifyJWT, async (req, res) => {
       const email = req.query.email
       if(!email) {
         return res.send([])
       }
-
       const decodedEmail = req.decoded?.email
        if(decodedEmail !== email){
         return res.status(403).send({message : 'not found'})
        }
-
       const filter = {email : email}
       const result = await cardsCollections.find(filter).toArray();
       if (result.length === 0) {
@@ -218,15 +213,14 @@ async function run() {
     })
 
 
-    // add to card
-
+    // add to card 
     app.post("/addToCard", async (req, res) => {
       const card = req.body;
       const result = await cardsCollections.insertOne(card);
       res.send(result);
     });
-    // delete cards form my cards
 
+    // delete cards form my cards
     app.delete("/deleteCard/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) }
@@ -234,14 +228,14 @@ async function run() {
       res.send(result);
     });
 
-    // Our Blogs data get
 
+    // Our Blogs data get
     app.get('/our-blogs', async (req, res) => {
       const result = await blogsCollection.find().toArray();
       res.send(result)
     })
-    // Blogs post
 
+    // Blogs post
     app.post("/blogPost", async (req, res) => {
       const blog = req.body;
       const result = await blogsCollection.insertOne(blog);
@@ -249,7 +243,7 @@ async function run() {
     });
 
 
-    // blog like
+    // blog like 
     app.patch(`/blogLike/:id`, async (req, res) => {
       const id = req.params.id;
       const likeEmail = req.body.email
@@ -267,16 +261,13 @@ async function run() {
     })
 
 
-    // blog dis like
+    // blog dislike
     app.patch(`/blogDisLike/:id`, async (req, res) => {
       const id = req.params.id;
       const likeEmail = req.body.email
       const filter = { _id: new ObjectId(id) }
       const findBlog = await blogsCollection.findOne(filter)
-
-
       let newEmails = findBlog?.loveEmails.filter(em => em !== likeEmail);
-
       const options = { upsert: true };
       const updateDoc = {
         $set: {
@@ -287,23 +278,22 @@ async function run() {
       res.send(result)
     })
 
-    // Blogs comment data get
-
+    // Blogs comment data get 
     app.get('/blogComments/:id', async (req, res) => {
       const id = req.params.id;
       const query = { postId: id }
       const result = await blogCommentsCollection.find(query).toArray();
       res.send(result)
     })
-    // Blogs comments post
 
+    // Blogs comments post
     app.post("/blogComments", async (req, res) => {
       const blog = req.body;
       const result = await blogCommentsCollection.insertOne(blog);
       res.send(result);
     });
 
-    // best dealers get single data find
+    // best dealers single data find
     app.get('/our-blogs/:id', async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) }
@@ -335,15 +325,13 @@ async function run() {
       res.send(toys)
     })
 
-
-
-    // users data get
+    // users data get 
     app.get('/users', async (req, res) => {
       const result = await usersCollection.find().toArray();
       res.send(result)
     })
 
-    // create user
+    // create user 
     app.post("/users", async (req, res) => {
       const user = req.body;
       const query = { email: user.email };
@@ -355,8 +343,8 @@ async function run() {
       res.send(result);
     });
 
-    // update user role
-    // make dealer
+    // update user role 
+    // make dealer 
     app.patch(`/makeDealer`, async (req, res) => {
       // const email = req?.body?.email
       const filter = { email: req?.body?.email }
@@ -370,6 +358,7 @@ async function run() {
       const result = await usersCollection.updateOne(filter, updateDoc, options)
       res.send(result)
     })
+
     // make dealer confirm
     app.patch(`/makeDealerConfirm/:id`, async (req, res) => {
       const id = req.params.id;
@@ -382,10 +371,10 @@ async function run() {
           role: 'dealer'
         },
       };
-
       const result = await usersCollection.updateOne(filter, updateDoc, options)
       res.send(result)
     })
+
     //  dealer reject
     app.patch(`/dealerReject/:id`, async (req, res) => {
       const id = req.params.id;
@@ -402,9 +391,7 @@ async function run() {
       res.send(result)
     })
 
-
-
-    // add dealer cars
+    // add dealer cars 
     app.post("/addACar", async (req, res) => {
       const data = req.body;
       if (!data) {
